@@ -1,0 +1,17 @@
+{
+    "name": "corep/find_lost_item_server",
+    "autoload": {
+        "psr-4": {
+            "DUVX\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dunn",
+            "email": "corepper03@gmail.com"
+        }
+    ],
+    "require": {
+        "dunn/dunn-web-server": "dev-dev"
+    }
+}

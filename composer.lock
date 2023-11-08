@@ -1,0 +1,58 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "bb218178aa4248ab6472bd7bc7654166",
+    "packages": [
+        {
+            "name": "dunn/dunn-web-server",
+            "version": "dev-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dunneeee/DunnWebServer.git",
+                "reference": "bc66efb55343f098d634a11a5fa5113892d57234"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dunneeee/DunnWebServer/zipball/bc66efb55343f098d634a11a5fa5113892d57234",
+                "reference": "bc66efb55343f098d634a11a5fa5113892d57234",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DunnWebServer\\": "src/DunnWebServer"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "dunn",
+                    "email": "corepper03@gmail.com"
+                }
+            ],
+            "description": "\"A simple library to make restful API\"",
+            "support": {
+                "issues": "https://github.com/dunneeee/DunnWebServer/issues",
+                "source": "https://github.com/dunneeee/DunnWebServer/tree/dev"
+            },
+            "time": "2023-11-03T13:51:11+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "dunn/dunn-web-server": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}
