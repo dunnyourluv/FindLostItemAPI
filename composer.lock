@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dunneeee/DunnWebServer.git",
-                "reference": "bc66efb55343f098d634a11a5fa5113892d57234"
+                "reference": "cb6d17dda96e5ac00231ecf780136d36feefe646"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dunneeee/DunnWebServer/zipball/bc66efb55343f098d634a11a5fa5113892d57234",
-                "reference": "bc66efb55343f098d634a11a5fa5113892d57234",
+                "url": "https://api.github.com/repos/dunneeee/DunnWebServer/zipball/cb6d17dda96e5ac00231ecf780136d36feefe646",
+                "reference": "cb6d17dda96e5ac00231ecf780136d36feefe646",
                 "shasum": ""
             },
             "type": "library",
@@ -41,7 +41,7 @@
                 "issues": "https://github.com/dunneeee/DunnWebServer/issues",
                 "source": "https://github.com/dunneeee/DunnWebServer/tree/dev"
             },
-            "time": "2023-11-03T13:51:11+00:00"
+            "time": "2023-11-08T12:38:41+00:00"
         }
     ],
     "packages-dev": [],
