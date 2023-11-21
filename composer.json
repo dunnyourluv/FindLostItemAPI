@@ -1,0 +1,18 @@
+{
+    "name": "corep/lost-item-api",
+    "autoload": {
+        "psr-4": {
+            "DUVX\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dunn",
+            "email": "corepper03@gmail.com"
+        }
+    ],
+    "require": {
+        "dunn/dunn-server": "dev-main",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

@@ -1,0 +1,777 @@
+openapi: '3.0.2'
+info:
+  title: Find Lost Item API
+  version: '1.0'
+  description: Tạm thời sẽ là các API như thế này, và đang thiếu một số API, sẽ bổ sung sau khi tìm hiểu.
+servers:
+  - url: http://localhost:8080/api/v1
+tags:
+  - name: User
+    description: Các API liên quan đến User
+  - name: Post
+    description: Các API liên quan đến các bài đăng của người dùng
+  - name: Topic
+    description: Các API liên quan đến các chủ đề
+  - name: Feedback
+    description: Các API liên quan đến phản hồi của người dùng
+paths:
+  /auth/login:
+    post:
+      tags:
+        - User
+      summary: Đăng nhập
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Tên đăng nhập
+                  example: dungyourluv
+                password:
+                  type: string
+                  description: Mật khẩu
+                  example: 123456
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Sai tên đăng nhập hoặc mật khẩu
+  /auth/register:
+    post:
+      tags:
+        - User
+      summary: Đăng ký
+      operationId: register
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Tên đăng nhập
+                  example: dungyourluv
+                password:
+                  type: string
+                  description: Mật khẩu
+                  example: 123456
+                email:
+                  type: string
+                  description: Email
+                  example:
+                name:
+                  type: string
+                  description: Tên
+                  example: Dung Le The
+                image:
+                  type: string
+                  format: binary
+                  description: Ảnh đại diện
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Tên đăng nhập hoặc email đã tồn tại
+  /profiles/me:
+    get:
+      security:
+        - basicAuth: []
+      tags:
+        - User
+      summary: Lấy thông tin người dùng hiện tại
+      operationId: getProfile
+      responses:
+        '200':
+          description: Thông tin người dùng hiện tại
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /profiles/{username}:
+    get:
+      tags:
+        - User
+      summary: Lấy thông tin người dùng theo username
+      operationId: getProfileByUsername
+      parameters:
+        - name: username
+          in: path
+          description: Tên đăng nhập của người dùng
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users:
+    get:
+      tags:
+        - User
+      summary: Lấy danh sách người dùng (ADMIN)
+      operationId: getUsers
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Số người dùng trên mỗi trang
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách người dùng
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+    post:
+      tags:
+        - User
+      summary: Thêm người dùng (ADMIN)
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Tên đăng nhập
+                  example: dungyourluv
+                password:
+                  type: string
+                  description: Mật khẩu
+                  example: 123456
+                email:
+                  type: string
+                  description: Email
+                  example:
+                name:
+                  type: string
+                  description: Tên
+                  example: Dung Le The
+                role:
+                  type: string
+                  description: Vai trò
+                  example: USER
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Tên đăng nhập hoặc email đã tồn tại
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+      security:
+        - basicAuth: []
+  /users/{uuid}:
+    put:
+      tags:
+        - User
+      summary: Cập nhật thông tin người dùng (ADMIN)
+      operationId: updateUser
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID của người dùng
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Tên đăng nhập
+                  example: dungyourluv
+                password:
+                  type: string
+                  description: Mật khẩu
+                  example: 123456
+                email:
+                  type: string
+                  description: Email
+                  example:
+                name:
+                  type: string
+                  description: Tên
+                  example: Dung Le The
+                role:
+                  type: string
+                  description: Vai trò
+                  example: USER
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Tên đăng nhập hoặc email đã tồn tại
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+    delete:
+      tags:
+        - User
+      summary: Xóa người dùng (ADMIN)
+      operationId: deleteUser
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID của người dùng
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Thông tin người dùng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+
+      security:
+        - basicAuth: []
+  /me/posts:
+    get:
+      security:
+        - basicAuth: []
+      tags:
+        - Post
+      summary: Lấy các bài đăng của người dùng hiện tại
+      operationId: getPosts
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Số bài đăng trên mỗi trang
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách các bài đăng
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+  /me/posts/{uuid}:
+    delete:
+      tags:
+        - Post
+      summary: Xóa bài đăng
+      operationId: deletePost
+      security:
+        - basicAuth: []
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID của bài đăng
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Thông tin bài đăng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+    put:
+      tags:
+        - Post
+      summary: Cập nhật bài đăng
+      operationId: updatePost
+      security:
+        - basicAuth: []
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID của bài đăng
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostBody'
+      responses:
+        '200':
+          description: Thông tin bài đăng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+  /{username}/posts:
+    get:
+      tags:
+        - Post
+      summary: Lấy các bài đăng của người dùng theo username
+      operationId: getPostsByUsername
+      parameters:
+        - name: username
+          in: path
+          description: Tên đăng nhập của người dùng
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Số bài đăng trên mỗi trang
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách các bài đăng
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+  /posts:
+    get:
+      tags:
+        - Post
+      summary: Lấy danh sách bài đăng
+      description: Nếu là người dùng thường thì sẽ lấy danh sách các bài đăng đã được xác thực, nếu là ADMIN thì sẽ lấy tất cả các bài đăng
+      operationId: getPostss
+      parameters:
+        - name: verified
+          in: query
+          description: Trạng thái xác thực của bài đăng (True - Đã xác thực, False - Chưa xác thực)
+          required: false
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Số bài đăng trên mỗi trang
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: isLost
+          in: query
+          description: Trạng thái của bài đăng (True - Lost, False - Found)
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Danh sách các bài đăng
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+  /post/{uuid}:
+    get:
+      tags:
+        - Post
+      summary: Lấy bài đăng theo Id
+      operationId: getPostById
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID của bài đăng
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Thông tin bài đăng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+  /me/posts/add:
+    post:
+      tags:
+        - 'Post'
+      summary: Thêm bài đăng mới
+      operationId: addPost
+      security:
+        - basicAuth: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostBody'
+      responses:
+        '200':
+          description: Thông tin bài đăng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+  /topic:
+    get:
+      tags:
+        - Topic
+      summary: Lấy danh sách chủ đề
+      operationId: getTopics
+      parameters:
+        - name: page
+          in: query
+          description: Số trang
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Số chủ đề trên mỗi trang
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Danh sách các chủ đề
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+    post:
+      tags:
+        - Topic
+      summary: Thêm chủ đề (ADMIN)
+      operationId: addTopic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Tên của chủ đề
+                  example: Ví
+                description:
+                  type: string
+                  description: Mô tả của chủ đề
+                  example: Tìm thấy ví
+      responses:
+        '200':
+          description: Thông tin chủ đề
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+      security:
+        - basicAuth: []
+  /topic/{uuid}:
+    put:
+      tags:
+        - Topic
+      summary: Cập nhật chủ đề (ADMIN)
+      operationId: updateTopic
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID của chủ đề
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Tên của chủ đề
+                  example: Ví
+                description:
+                  type: string
+                  description: Mô tả của chủ đề
+                  example: Tìm thấy ví
+      responses:
+        '200':
+          description: Thông tin chủ đề
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+      security:
+        - basicAuth: []
+    delete:
+      tags:
+        - Topic
+      summary: Xóa chủ đề (ADMIN)
+      operationId: deleteTopic
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID của chủ đề
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Thông tin chủ đề
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+        '401':
+          description: Chưa đăng nhập hoặc không có quyền truy cập
+      security:
+        - basicAuth: []
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID của người dùng
+          example: 123e4567-e89b-12d3-a456-426614174000
+        username:
+          type: string
+          description: Tên đăng nhập của người dùng
+          example: dungyourluv
+        email:
+          type: string
+          description: Email của người dùng
+          example: dungyourluv@gmail.com
+        name:
+          type: string
+          description: Tên của người dùng
+          example: Dung
+        isAdmin:
+          type: boolean
+          description: Vai trò của người dùng
+          example: false
+        avatar:
+          type: string
+          description: Link ảnh đại diện của người dùng
+          example: https://i.imgur.com/1.jpg
+    Post:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID của bài đăng
+          example: 123e4567-e89b-12d3-a456-426614174000
+        title:
+          type: string
+          description: Tiêu đề của bài đăng
+          example: Tìm thấy ví
+        content:
+          type: string
+          description: Nội dung của bài đăng
+          example: Tìm thấy ví ở cổng trường đại học Công Nghệ Thông Tin
+        isLost:
+          type: boolean
+          description: Trạng thái của bài đăng (True - Lost, False - Found)
+          example: true
+        verified:
+          type: boolean
+          description: Trạng thái xác thực của bài đăng (True - Đã xác thực, False - Chưa xác thực)
+          example: true
+        images:
+          type: array
+          description: Danh sách các ảnh của bài đăng
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                description: UUID của ảnh
+                example: 123e4567-e89b-12d3-a456-426614174000
+              url:
+                type: string
+                description: Link ảnh
+                example: https://i.imgur.com/1.jpg
+        topic:
+          type: object
+          description: Chủ đề của bài đăng
+          properties:
+            uuid:
+              type: string
+              description: UUID của chủ đề
+              example: 123e4567-e89b-12d3-a456-426614174000
+            name:
+              type: string
+              description: Tên của chủ đề
+              example: Ví
+            description:
+              type: string
+              description: Mô tả của chủ đề
+              example: Tìm thấy ví
+        user:
+          $ref: '#/components/schemas/User'
+        location:
+          $ref: '#/components/schemas/Location'
+
+        createdAt:
+          type: string
+          description: Thời gian tạo bài đăng
+          example: 2021-05-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          description: Thời gian cập nhật bài đăng
+          example: 2021-05-01T00:00:00.000Z
+    Location:
+      type: string
+      example: Ngũ Hành Sơn, Đà Nẵng
+    Topic:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID của chủ đề
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: Tên của chủ đề
+          example: Ví
+        description:
+          type: string
+          description: Mô tả của chủ đề
+          example: Tìm thấy ví
+    Feedback:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: UUID của phản hồi
+          example: 123e4567-e89b-12d3-a456-426614174000
+        content:
+          type: string
+          description: Nội dung của phản hồi
+          example: Tìm thấy ví ở cổng trường đại học Công Nghệ Thông Tin
+        user:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          description: Thời gian tạo phản hồi
+          example: 2021-05-01T00:00:00.000Z
+        updatedAt:
+          type: string
+          description: Thời gian cập nhật phản hồi
+          example: 2021-05-01T00:00:00.000Z
+    PostBody:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Tiêu đề của bài đăng
+          example: Tìm thấy ví
+        content:
+          type: string
+          description: Nội dung của bài đăng
+          example: Tìm thấy ví ở cổng trường đại học Công Nghệ Thông Tin
+        isLost:
+          type: boolean
+          description: Trạng thái của bài đăng (True - Lost, False - Found)
+          example: true
+        topic:
+          type: string
+          description: UUID của chủ đề
+          example: 123e4567-e89b-12d3-a456-426614174000
+        location:
+          type: object
+          properties:
+            address:
+              type: string
+              description: Địa chỉ của bài đăng
+              example: Ngũ Hành Sơn, Đà Nẵng
+            latitude:
+              type: number
+              description: Vĩ độ của bài đăng
+              example: 16.047079
+            longitude:
+              type: number
+              description: Kinh độ của bài đăng
+              example: 108.206230
+        images:
+          type: array
+          description: Danh sách các ảnh của bài đăng
+          items:
+            type: string
+            format: binary
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Đăng nhập bằng tài khoản và mật khẩu
