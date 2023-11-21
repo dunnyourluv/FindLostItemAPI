@@ -40,7 +40,7 @@ abstract class Model implements \JsonSerializable
 
   /**
    * @param string $id
-   * @return T
+   * @return T | null
    */
   abstract function getById($id);
 
