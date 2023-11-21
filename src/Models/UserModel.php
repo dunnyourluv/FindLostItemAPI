@@ -32,6 +32,9 @@ class UserModel extends Model
     $this->updatedAt = $updatedAt;
   }
 
+  /**
+   * @return UserBuilder
+   */
   static function builder()
   {
     return new UserBuilder();
@@ -135,7 +138,8 @@ class UserModel extends Model
     $db = Database::connect();
     $data = $this->toDatabase();
     $data['uuid'] = $this->uuid;
-    return $db->insert($this->tableName, $data);
+    $db->insert($this->tableName, $data);
+    return $this->getById($this->uuid);
   }
   function update()
   {
@@ -155,16 +159,17 @@ class UserModel extends Model
   function getAll()
   {
     $db = Database::connect();
-    $stm = $db->run('SELECT * FROM '. $this->tableName);
+    $stm = $db->run('SELECT * FROM ' . $this->tableName);
     $data = $stm->fetchAll();
-    return array_map(function ($item) {return static::builder()->fromArray($item)->build();}, $data);
+    return array_map(function ($item) {
+      return static::builder()->fromArray($item)->build(); }, $data);
   }
   function getById($id)
   {
     $db = Database::connect();
-    $stm = $db->run('SELECT * FROM'. $this->tableName .'WHERE uuid = ?', [$id]);
+    $stm = $db->run('SELECT * FROM ' . $this->tableName . ' WHERE uuid = ?', [$id]);
     $data = $stm->fetch();
-    return static::builder()->fromArray($data)->build();
+    return $data ? static::builder()->fromArray($data)->build() : null;
   }
 
   function toDatabase()
@@ -176,5 +181,21 @@ class UserModel extends Model
       "is_admin" => $this->isAdmin,
       "avatar" => $this->avatar,
     ];
+  }
+
+  function getByUsername($username)
+  {
+    $db = Database::connect();
+    $stm = $db->run('SELECT * FROM' . $this->tableName . 'WHERE username = ?', [$username]);
+    $data = $stm->fetch();
+    return $data ? static::builder()->fromArray($data)->build() : null;
+  }
+
+  function has()
+  {
+    $db = Database::connect();
+    $stm = $db->run('SELECT * FROM '. $this->tableName.' WHERE username = ? OR email = ?', [$this->username, $this->email]);
+    $data = $stm->fetch();
+    return $data ? true : false;
   }
 }

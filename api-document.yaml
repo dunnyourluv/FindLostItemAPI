@@ -68,10 +68,6 @@ paths:
                   type: string
                   description: Email
                   example:
-                name:
-                  type: string
-                  description: Tên
-                  example: Dung Le The
                 image:
                   type: string
                   format: binary
