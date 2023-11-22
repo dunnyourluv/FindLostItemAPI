@@ -8,7 +8,7 @@ namespace DUVX\Models;
 class HttpPayload implements \JsonSerializable
 {
   private $data;
-  private \Exception | null $error;
+  private \Exception|null $error;
   private $code;
   private $message;
 
@@ -27,6 +27,10 @@ class HttpPayload implements \JsonSerializable
 
   static function failed(\Exception $err, $message = '', $code = 500, $data = null)
   {
+    if ($err instanceof \Exception) {
+      $code = $err->getCode() ?? $code;
+
+    }
     return new self($data, $err, $code, $message);
   }
 
@@ -64,7 +68,7 @@ class HttpPayload implements \JsonSerializable
   /**
    * @return \Exception|null
    */
-  public function getError(): \Exception | null
+  public function getError(): \Exception|null
   {
     return $this->error;
   }

@@ -34,7 +34,7 @@ abstract class Model implements \JsonSerializable
   abstract function update();
 
   /**
-   * @return T[]
+   * @return DunnArray<T>
    */
   abstract function getAll();
 
@@ -59,6 +59,9 @@ abstract class Model implements \JsonSerializable
     return $this->tableName;
   }
 
+  /**
+   * @return DunnMap<string>
+   */
   function validate()
   {
     $data = $this->toDatabase();
@@ -68,6 +71,6 @@ abstract class Model implements \JsonSerializable
         $errors[$key] = "Field $key is required";
       }
     }
-    return $errors;
+    return new DunnMap($errors);
   }
 }

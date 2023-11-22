@@ -157,7 +157,7 @@ paths:
       operationId: addUser
       requestBody:
         content:
-          application/json:
+          multipart/form-data:
             schema:
               type: object
               properties:
@@ -172,15 +172,15 @@ paths:
                 email:
                   type: string
                   description: Email
-                  example:
-                name:
-                  type: string
-                  description: Tên
-                  example: Dung Le The
-                role:
-                  type: string
+                  example: dungyourluv@gmail.com
+                isAdmin:
+                  type: boolean
                   description: Vai trò
-                  example: USER
+                  example: true
+                avatar:
+                  type: string
+                  format: binary
+                  description: Ảnh đại diện
       responses:
         '200':
           description: Thông tin người dùng

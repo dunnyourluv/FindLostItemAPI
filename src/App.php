@@ -5,9 +5,11 @@ namespace DUVX;
 use DunnServer\DunnServer;
 use DunnServer\Router\Router;
 use DUVX\Controllers\HomeCtl;
+use DUVX\Controllers\NotFoundCtl;
 use DUVX\Middlewares\CORSFilter;
 use DUVX\Router\AuthRouter;
 use DUVX\Router\ProfileRouter;
+use DUVX\Router\UserRouter;
 
 class App
 {
@@ -28,9 +30,13 @@ class App
     $apiRouter = new Router('/api/v1');
     $apiRouter->useRouter(new AuthRouter());
     $apiRouter->useRouter(new ProfileRouter());
-
+    $apiRouter->useRouter(new UserRouter());
     // Router setup
     $server->useRouter($apiRouter);
+
+
+    // NotFound
+    $server->addRoute('/*', new NotFoundCtl());
 
     $server->run();
   }

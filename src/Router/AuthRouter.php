@@ -6,6 +6,7 @@ use DunnServer\Middlewares\HandleFileFilter;
 use DunnServer\Router\Router;
 use DUVX\Controllers\LoginCtl;
 use DUVX\Controllers\RegisterCtl;
+use DUVX\Middlewares\CustomUploadFilter;
 
 class AuthRouter extends Router
 {
@@ -16,6 +17,6 @@ class AuthRouter extends Router
     $this->addRoute('/register', new RegisterCtl());
 
     //File Upload Filter
-    $this->addFilter('/register', new HandleFileFilter($this->req()->server('DOCUMENT_ROOT') . '/uploads/avatar', '/uploads/avatar'));
+    $this->addFilter('/register', new CustomUploadFilter('/uploads/avatar'));
   }
 }

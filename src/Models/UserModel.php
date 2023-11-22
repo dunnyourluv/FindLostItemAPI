@@ -2,8 +2,10 @@
 
 namespace DUVX\Models;
 
+use DunnServer\Utils\DunnArray;
 use DUVX\Models\Builders\UserBuilder;
 use DUVX\Utils\Database;
+use DUVX\Utils\StringBuilder;
 
 /**
  * @extends Model<UserModel>
@@ -149,20 +151,33 @@ class UserModel extends Model
   }
   function delete()
   {
+    $avatarRootPath = $_SERVER['DOCUMENT_ROOT'] . $this->avatar;
+    if (file_exists($avatarRootPath)) {
+      unlink($avatarRootPath);
+    }
     $db = Database::connect();
     return $db->delete($this->tableName, 'uuid = :uuid', ['uuid' => $this->uuid]);
   }
 
   /**
-   * @return UserModel[]
+   * @return \DunnServer\Utils\DunnArray<UserModel>
    */
-  function getAll()
+  function getAll($limit = 0, $offset = 0)
   {
     $db = Database::connect();
-    $stm = $db->run('SELECT * FROM ' . $this->tableName);
-    $data = $stm->fetchAll();
-    return array_map(function ($item) {
-      return static::builder()->fromArray($item)->build(); }, $data);
+    $sql = new StringBuilder();
+    $sql->append('SELECT * FROM ' . $this->tableName);
+    if ($limit > 0) {
+      $sql->append(' LIMIT ' . $limit);
+    }
+    if ($offset > 0) {
+      $sql->append(' OFFSET ' . $offset);
+    }
+    $stm = $db->run($sql->toString());
+    $data = new DunnArray(...$stm->fetchAll());
+    return $data->map(function ($item) {
+      return static::builder()->fromArray($item)->build();
+    });
   }
   function getById($id)
   {
@@ -194,8 +209,27 @@ class UserModel extends Model
   function has()
   {
     $db = Database::connect();
-    $stm = $db->run('SELECT * FROM '. $this->tableName.' WHERE username = ? OR email = ?', [$this->username, $this->email]);
+    $stm = $db->run('SELECT * FROM ' . $this->tableName . ' WHERE username = ? OR email = ?', [$this->username, $this->email]);
     $data = $stm->fetch();
     return $data ? true : false;
+  }
+
+  function validate()
+  {
+    $errors = parent::validate();
+    $emailPattern = '/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/';
+    if (!preg_match($emailPattern, $this->email)) {
+      $errors->set('email', 'Email is invalid!');
+    }
+
+    if (strlen($this->username) < 6) {
+      $errors->set('username', 'Username must be at least 6 characters!');
+    }
+
+    if (strlen($this->password) < 6) {
+      $errors->set('password', 'Password must be at least 6 characters!');
+    }
+
+    return $errors;
   }
 }
