@@ -186,7 +186,7 @@ class UserModel extends Model
   function getByUsername($username)
   {
     $db = Database::connect();
-    $stm = $db->run('SELECT * FROM' . $this->tableName . 'WHERE username = ?', [$username]);
+    $stm = $db->run('SELECT * FROM ' . $this->tableName . ' WHERE username = ?', [$username]);
     $data = $stm->fetch();
     return $data ? static::builder()->fromArray($data)->build() : null;
   }

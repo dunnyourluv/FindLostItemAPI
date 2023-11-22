@@ -14,7 +14,7 @@ class RegisterCtl extends Controller
   {
     $body = $req->getBody();
     $uploads = $req->getUploads();
-    $avatar = $uploads->get('avatar', new DunnArray())->get(0);
+    $avatar = $uploads->get('avatar', new DunnArray())->get(0); // [File]
     $user = UserModel::builder()->fromBody($body)->isAdmin(false)->uuid(uniqid())->avatar($avatar ? $avatar->getPath() : null)->build();
     try {
       $errors = new DunnArray(...$user->validate());
@@ -22,14 +22,16 @@ class RegisterCtl extends Controller
         $mess = $errors->join(', ');
         throw new AuthException($mess, 400);
       } else {
-        if($user->has()) throw new AuthException('Username or email already exists!', 500);
+        if ($user->has())
+          throw new AuthException('Username or email already exists!', 500);
         $user = $user->save();
         $payload = HttpPayload::success($user, 'Register successfully!');
       }
     } catch (AuthException $th) {
       $payload = HttpPayload::failed($th);
       $res->status($payload->getCode());
-      if($avatar) $avatar->remove();
+      if ($avatar)
+        $avatar->remove();
     }
     $res->send($payload);
   }
