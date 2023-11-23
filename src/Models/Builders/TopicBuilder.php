@@ -37,5 +37,9 @@ class TopicBuilder{
     {
         return new TopicModel($this->uuid, $this->name, $this->createdAt, $this->updatedAt);
     }
-
+    public function fromBody($body){
+        $this->name = $body->get('name');
+        $this->uuid = $body->get('uuid');
+        return $this;
+    }
 }

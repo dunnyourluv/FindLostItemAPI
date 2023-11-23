@@ -5,8 +5,9 @@ use DunnServer\Utils\DunnArray;
 use DUVX\Models\Builders\TopicBuilder;
 use DUVX\Utils\Database;
 use DUVX\Utils\StringBuilder;
+use DUVX\Models\Model;
 
-class TopicModel{
+class TopicModel extends Model{
     private $uuid;
     private $name;
     private $createdAt;
@@ -63,18 +64,49 @@ class TopicModel{
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $data = new DunnArray(...$stmt->fetchAll());
+        return $data;
     }
-    public function getOne($id){
-
+    public function getById($id){
+        
     }
-    public function create($data){
-
+    public function save(){
+        $db = Database::connect();
+        $data = $this->toDatabase();
+        $db->insert($this->tableName, $data);
+        return $this->getById($this->uuid);
     }
-    public function update($id, $data){
-
+    public function update(){
+        $db = Database::connect();
+        $data = $this->getValuesWithoutNull($this->toDatabase());
+        return $db->update($this->tableName, $data, 'uuid = :uuid', ['uuid' => $this->uuid]);
     }
-    public function delete($id){
-
+    public function delete(){
+        $db = Database::connect();
+        return $db->delete($this->tableName, 'uuid = :uuid', ['uuid' => $this->uuid]);
     }
 
+    public function toDatabase()
+    {
+        return [
+            "uuid" => $this->uuid,
+            "name" => $this->name,
+        ];
+    }
+    public function getValuesWithoutNull($data){
+        $result = [];
+        foreach ($data as $key => $value) {
+            if($value != null){
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+    function validate()
+    {
+        $errors = new DunnArray();
+        if ($this->name == null) {
+            $errors->push('Name is required!');
+        }
+        return $errors;
+    }
 }
