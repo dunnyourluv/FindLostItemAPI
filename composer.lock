@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dunneeee/DunnServer.git",
-                "reference": "a763d806af5f7891727244e7832a7cf9702018fa"
+                "reference": "b45d65195df16e436cca28e7223c323ddcaeb59f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dunneeee/DunnServer/zipball/a763d806af5f7891727244e7832a7cf9702018fa",
-                "reference": "a763d806af5f7891727244e7832a7cf9702018fa",
+                "url": "https://api.github.com/repos/dunneeee/DunnServer/zipball/b45d65195df16e436cca28e7223c323ddcaeb59f",
+                "reference": "b45d65195df16e436cca28e7223c323ddcaeb59f",
                 "shasum": ""
             },
             "require": {
@@ -44,7 +44,7 @@
                 "issues": "https://github.com/dunneeee/DunnServer/issues",
                 "source": "https://github.com/dunneeee/DunnServer/tree/main"
             },
-            "time": "2023-11-21T13:23:56+00:00"
+            "time": "2023-11-23T01:11:42+00:00"
         },
         {
             "name": "graham-campbell/result-type",
