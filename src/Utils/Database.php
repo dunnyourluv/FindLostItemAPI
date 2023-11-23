@@ -90,4 +90,8 @@ class Database extends \PDO
 
     return $stmt->execute();
   }
+  public function getInstance()
+  {
+    return $this;
+  }
 }

@@ -38,12 +38,6 @@ class UserBuilder
     return $this;
   }
 
-  function name($name)
-  {
-    $this->name = $name;
-    return $this;
-  }
-
   function isAdmin($isAdmin)
   {
     $this->isAdmin = $isAdmin;
