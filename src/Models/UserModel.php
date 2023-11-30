@@ -3,8 +3,10 @@
 namespace DUVX\Models;
 
 use DunnServer\Utils\DunnArray;
+use DUVX\Exceptions\UserException;
 use DUVX\Models\Builders\UserBuilder;
 use DUVX\Utils\Database;
+use DUVX\Utils\FieldValidate;
 use DUVX\Utils\StringBuilder;
 
 /**
@@ -141,14 +143,34 @@ class UserModel extends Model
     $data = $this->toDatabase();
     $data['uuid'] = $this->uuid;
     $db->insert($this->tableName, $data);
-    return $this->getById($this->uuid);
+    return $this->getById();
   }
   function update()
   {
     $db = Database::connect();
     $data = $this->getValuesWithoutNull($this->toDatabase());
-    return $db->update($this->tableName, $data, 'uuid = :uuid', ['uuid' => $this->uuid]);
+    $updated = $db->update($this->tableName, $data, 'uuid = :uuid', ['uuid' => $this->uuid]);
+    return $updated ? $this->getById() : null;
   }
+
+  function updateFromUser(UserModel $user)
+  {
+    $this->username = $user->username;
+    $this->email = $user->email;
+    $this->isAdmin = $user->isAdmin;
+    $this->avatar = $user->avatar;
+    $this->password = $user->password;
+
+    if ($this->email && !FieldValidate::validateEmail($this->email))
+      throw new UserException('Email is invalid', 400);
+    if ($this->username && !FieldValidate::validateUsername($this->username))
+      throw new UserException('Username is invalid', 400);
+    if ($this->password && !FieldValidate::validatePassword($this->password))
+      throw new UserException('Password is invalid', 400);
+
+    return $this->update();
+  }
+
   function delete()
   {
     $avatarRootPath = $_SERVER['DOCUMENT_ROOT'] . $this->avatar;
@@ -179,10 +201,10 @@ class UserModel extends Model
       return static::builder()->fromArray($item)->build();
     });
   }
-  function getById($id)
+  function getById()
   {
     $db = Database::connect();
-    $stm = $db->run('SELECT * FROM ' . $this->tableName . ' WHERE uuid = ?', [$id]);
+    $stm = $db->run('SELECT * FROM ' . $this->tableName . ' WHERE uuid = ?', [$this->uuid]);
     $data = $stm->fetch();
     return $data ? static::builder()->fromArray($data)->build() : null;
   }
@@ -198,10 +220,10 @@ class UserModel extends Model
     ];
   }
 
-  function getByUsername($username)
+  function getByUsername()
   {
     $db = Database::connect();
-    $stm = $db->run('SELECT * FROM ' . $this->tableName . ' WHERE username = ?', [$username]);
+    $stm = $db->run('SELECT * FROM ' . $this->tableName . ' WHERE username = ?', [$this->username]);
     $data = $stm->fetch();
     return $data ? static::builder()->fromArray($data)->build() : null;
   }

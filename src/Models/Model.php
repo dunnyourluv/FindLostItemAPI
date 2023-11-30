@@ -39,10 +39,9 @@ abstract class Model implements \JsonSerializable
   abstract function getAll();
 
   /**
-   * @param string $id
    * @return T | null
    */
-  abstract function getById($id);
+  abstract function getById();
 
   function getValuesWithoutNull($arr)
   {

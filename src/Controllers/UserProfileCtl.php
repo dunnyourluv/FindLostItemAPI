@@ -11,8 +11,8 @@ class UserProfileCtl extends Controller
   function doGet($req, $res)
   {
     $username = $req->getParams('username');
-    $model = UserModel::builder()->build();
-    $user = $model->getByUsername($username);
+    $model = UserModel::builder()->username($username)->build();
+    $user = $model->getByUsername();
     $payload = HttpPayload::success($user, 'User Info');
     $res->send($payload);
   }
