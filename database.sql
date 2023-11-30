@@ -15,6 +15,14 @@ CREATE TABLE `users` (
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+
+CREATE TABLE `post_topic` (
+  `uuid` VARCHAR(36) NOT NULL PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 CREATE TABLE `posts` (
   `uuid` VARCHAR(36) NOT NULL PRIMARY KEY,
   `user_uuid` VARCHAR(36) NOT NULL,
@@ -24,7 +32,7 @@ CREATE TABLE `posts` (
   `status` VARCHAR(16) NOT NULL DEFAULT 'pending',
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (`user_uuid`) REFERENCES `users` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+  FOREIGN KEY (`user_uuid`) REFERENCES `users` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`topic_uuid`) REFERENCES `post_topic` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -48,9 +56,5 @@ CREATE TABLE `post_location`(
   FOREIGN KEY (`post_uuid`) REFERENCES `posts` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `post_topic` (
-  `uuid` VARCHAR(36) NOT NULL PRIMARY KEY,
-  `name` VARCHAR(255) NOT NULL,
-  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-);
+-- Insert default admin user
+INSERT INTO `users` (`uuid`, `username`, `password`, `email`, `is_admin`, `avatar`) VALUES ('1', 'admin', 'admin', 'admin@gmail.com', 1, 'https://i.imgur.com/1qB3q9o.png');
