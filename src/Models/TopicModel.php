@@ -12,19 +12,29 @@ class TopicModel extends Model
   private $uuid;
   private $name;
 
-  public function __construct($uuid = null, $name = null)
+  private $createdAt;
+  private $updatedAt;
+
+  public function __construct($uuid = null, $name = null, $createdAt = null, $updatedAt = null)
   {
     parent::__construct('post_topic');
     $this->uuid = $uuid;
     $this->name = $name;
+    $this->createdAt = $createdAt;
+    $this->updatedAt = $updatedAt;
   }
 
   function toDatabase()
   {
     return [
       'uuid' => $this->uuid,
-      'name' => $this->name
+      'name' => $this->name,
     ];
+  }
+
+  static function fromDatabase($data)
+  {
+    return new TopicModel($data['uuid'], $data['name'], $data['created_at'], $data['updated_at']);
   }
 
   function save()
@@ -88,7 +98,7 @@ class TopicModel extends Model
 
     $data = new DunnArray(...$stm->fetchAll());
     return $data->map(function ($item) {
-      return new TopicModel($item['uuid'], $item['name']);
+      return self::fromDatabase($item);
     });
   }
 
@@ -97,7 +107,7 @@ class TopicModel extends Model
     $db = Database::connect();
     $stm = $db->run('SELECT * FROM ' . $this->getTableName() . ' WHERE uuid = ?', [$this->uuid]);
     $data = $stm->fetch();
-    return $data ? new TopicModel($data['uuid'], $data['name']) : null;
+    return $data ? self::fromDatabase($data) : null;
   }
 
   function has()
@@ -109,7 +119,9 @@ class TopicModel extends Model
   {
     return [
       'uuid' => $this->uuid,
-      'name' => $this->name
+      'name' => $this->name,
+      'createdAt' => $this->createdAt,
+      'updatedAt' => $this->updatedAt,
     ];
   }
 
