@@ -68,7 +68,7 @@ paths:
                   type: string
                   description: Email
                   example:
-                image:
+                avatar:
                   type: string
                   format: binary
                   description: Ảnh đại diện
@@ -505,6 +505,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Topic'
+  /topic/add:
     post:
       tags:
         - Topic
