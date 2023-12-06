@@ -8,6 +8,7 @@ use DUVX\Controllers\HomeCtl;
 use DUVX\Controllers\NotFoundCtl;
 use DUVX\Middlewares\CORSFilter;
 use DUVX\Router\AuthRouter;
+use DUVX\Router\PostPrivateRouter;
 use DUVX\Router\ProfileRouter;
 use DUVX\Router\TopicRouter;
 use DUVX\Router\UserRouter;
@@ -33,6 +34,7 @@ class App
     $apiRouter->useRouter(new ProfileRouter());
     $apiRouter->useRouter(new UserRouter());
     $apiRouter->useRouter(new TopicRouter());
+    $apiRouter->useRouter(new PostPrivateRouter());
     // Router setup
     $server->useRouter($apiRouter);
 

@@ -7,6 +7,9 @@ use DUVX\Exceptions\TopicException;
 use DUVX\Utils\Database;
 use DUVX\Utils\StringBuilder;
 
+/**
+ * @extends Model<TopicModel>
+ */
 class TopicModel extends Model
 {
   private $uuid;

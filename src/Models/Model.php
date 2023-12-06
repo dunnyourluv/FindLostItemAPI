@@ -31,6 +31,11 @@ abstract class Model implements \JsonSerializable
   abstract function delete();
   abstract function update();
 
+  function has()
+  {
+    return $this->getById() !== null;
+  }
+
   /**
    * @return DunnArray<T>
    */
