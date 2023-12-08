@@ -3,6 +3,7 @@
 namespace DUVX\Controllers;
 
 use DunnServer\MVC\Controller;
+use DUVX\Exceptions\PostException;
 use DUVX\Models\HttpPayload;
 use DUVX\Models\PostModel;
 

@@ -89,9 +89,18 @@ class PostModel extends Model
     $data = $this->toDatabase();
     unset($data['uuid']);
     unset($data['user_uuid']);
-    unset($data['topic_uuid']);
+
+    if ($this->topicUuid) {
+      $topic = new TopicModel($this->topicUuid);
+      if (!$topic->has())
+        throw new PostException('Topic not found', 404);
+    }
+
+    $user = UserModel::builder()->uuid($this->userUuid)->build();
+    if (!$user->getById())
+      throw new PostException('User not found', 404);
     $data = $this->getValuesWithoutNull($data);
-    $db->update($this->getTableName(), $data, ['uuid' => $this->uuid]);
+    $db->update($this->getTableName(), $data, 'uuid = :uuid', ['uuid' => $this->uuid]);
     return $this->getById();
   }
 
@@ -100,7 +109,7 @@ class PostModel extends Model
     if (!$this->has())
       throw new PostException('Post not found', 404);
     $db = Database::connect();
-    $success = $db->delete($this->getTableName(), ['uuid' => $this->uuid]);
+    $success = $db->delete($this->getTableName(), 'uuid = :uuid', ['uuid' => $this->uuid]);
     return $success;
   }
 
@@ -129,7 +138,7 @@ class PostModel extends Model
 
     $stm = $db->run('SELECT * FROM ' . $this->getTableName() . ' WHERE uuid = :uuid', ['uuid' => $this->uuid]);
     $data = $stm->fetch();
-    return self::builder()->fromDatabase($data)->build();
+    return $data ? self::builder()->fromDatabase($data)->build() : null;
   }
 
   function jsonSerialize(): mixed
