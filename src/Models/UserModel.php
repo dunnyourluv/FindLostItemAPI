@@ -51,7 +51,7 @@ class UserModel extends Model
       "username" => $this->username,
       "email" => $this->email,
       "isAdmin" => $this->isAdmin,
-      "avatar" => $this->avatar,
+      "avatar" => str_starts_with($this->avatar, '/') ? 'http://' . $_SERVER['HTTP_HOST'] . $this->avatar : $this->avatar,
       'createdAt' => $this->createdAt,
       'updatedAt' => $this->updatedAt
     ];

@@ -115,7 +115,7 @@ class ImageModel extends Model
   {
     return [
       'uuid' => $this->uuid,
-      'url' => $this->image,
+      'url' => str_starts_with($this->image, '/') ? 'http://' . $_SERVER['HTTP_HOST'] . $this->image : $this->image,
       'createdAt' => $this->createdAt,
       'updatedAt' => $this->updatedAt,
     ];

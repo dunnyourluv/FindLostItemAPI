@@ -179,6 +179,61 @@ class PostModel extends Model
   }
 
   /**
+   * @return DunnArray<PostModel>
+   */
+  function getSWithStatus($limit = 0, $offset = 0)
+  {
+    $db = Database::connect();
+    $sql = new StringBuilder();
+    $sql->append('SELECT * FROM ' . $this->getTableName() . ' WHERE status = ?');
+    $sql->append(' ORDER BY created_at DESC');
+    if ($limit > 0)
+      $sql->append(' LIMIT ' . $limit);
+    if ($offset > 0)
+      $sql->append(' OFFSET ' . $offset);
+
+    $stm = $db->run($sql->toString(), [$this->status]);
+    $data = new DunnArray(...$stm->fetchAll());
+    return $data->map(function ($item) {
+      return self::builder()->fromDatabase($item)->build();
+    });
+  }
+
+  static function search($keyword = '', $topic = '', $address = '')
+  {
+    $sql = new StringBuilder();
+    $db = Database::connect();
+    $sql->append('SELECT * FROM posts WHERE ');
+    $sql->append('title LIKE :keyword ');
+    if ($topic) {
+      $sql->append('AND topic_uuid = :topic ');
+    }
+
+    if ($address) {
+      $sql->append('AND location LIKE :address ');
+    }
+
+    $sql->append('ORDER BY created_at DESC');
+
+    $stmt = $db->prepare($sql->toString());
+
+    $stmt->bindValue(':keyword', '%' . $keyword . '%');
+    if ($topic) {
+      $stmt->bindValue(':topic', $topic);
+    }
+    if ($address) {
+      $stmt->bindValue(':address', '%' . $address . '%');
+    }
+
+    $stmt->execute();
+    $posts = new DunnArray(...$stmt->fetchAll());
+    $stmt->closeCursor();
+    return $posts->map(function ($post) {
+      return PostModel::builder()->fromDatabase($post)->build();
+    });
+  }
+
+  /**
    * Get the value of title
    */
   public function getTitle()
