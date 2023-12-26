@@ -5,13 +5,13 @@ namespace DUVX\Middlewares;
 use DunnServer\Middlewares\Filter;
 use DUVX\Exceptions\AuthException;
 use DUVX\Models\AuthModel;
-use DUVX\Models\HttpPayload;
 use DUVX\Models\UserModel;
 
-class AuthFilter implements Filter
+class SetUserExists implements Filter
 {
   function doFilter($req, $res, $chain)
   {
+
     $authorization = $req->getHeaders('Authorization');
     if ($authorization) {
       $basic = explode(' ', $authorization)[1] ?? null;
@@ -26,13 +26,9 @@ class AuthFilter implements Filter
           $req->setParams('user', $userVerified);
           $chain->doFilter($req, $res);
         } catch (AuthException $e) {
-          $payload = HttpPayload::failed($e);
-          $res->status($payload->getCode())->send($payload);
         }
       }
-    } else {
-      $payload = HttpPayload::failed(new AuthException('Authorization header not found', 401));
-      $res->status($payload->getCode())->send($payload);
     }
+    $chain->doFilter($req, $res);
   }
 }

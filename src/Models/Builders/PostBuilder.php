@@ -104,13 +104,9 @@ class PostBuilder
    */
   function fromBody($data)
   {
-    $this->uuid = $data->get('uuid');
-    $this->userUuid = $data->get('userUuid');
     $this->topicUuid = $data->get('topic');
     $this->title = $data->get('title');
     $this->content = $data->get('content');
-    $this->createdAt = $data->get('createdAt');
-    $this->updatedAt = $data->get('updatedAt');
     $this->location = $data->get('location');
     return $this;
   }

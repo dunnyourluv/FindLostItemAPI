@@ -3,9 +3,13 @@
 namespace DUVX\Router;
 
 use DunnServer\Router\Router;
+use DUVX\Controllers\AcceptPostCtl;
 use DUVX\Controllers\PostDetailCtl;
 use DUVX\Controllers\RecommendPostCtl;
 use DUVX\Controllers\SearchPostCtl;
+use DUVX\Middlewares\AuthFilter;
+use DUVX\Middlewares\IsAdminFilter;
+use DUVX\Middlewares\SetUserExists;
 
 class PostPublicRouter extends Router
 {
@@ -15,5 +19,8 @@ class PostPublicRouter extends Router
     $this->addRoute('/recommend', new RecommendPostCtl());
     $this->addRoute('/search', new SearchPostCtl());
     $this->addRoute('/{uuid}', new PostDetailCtl());
+
+    //Filter
+    $this->addFilter('/{uuid}', new SetUserExists());
   }
 }

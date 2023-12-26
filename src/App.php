@@ -7,11 +7,11 @@ use DunnServer\Router\Router;
 use DUVX\Controllers\HomeCtl;
 use DUVX\Controllers\NotFoundCtl;
 use DUVX\Middlewares\CORSFilter;
+use DUVX\Router\AdminPostRouter;
 use DUVX\Router\AuthRouter;
 use DUVX\Router\PostPrivateRouter;
 use DUVX\Router\PostPublicRouter;
 use DUVX\Router\ProfileRouter;
-use DUVX\Router\SearchRouter;
 use DUVX\Router\TopicRouter;
 use DUVX\Router\UserRouter;
 
@@ -38,6 +38,7 @@ class App
     $apiRouter->useRouter(new TopicRouter());
     $apiRouter->useRouter(new PostPrivateRouter());
     $apiRouter->useRouter(new PostPublicRouter());
+    $apiRouter->useRouter(new AdminPostRouter());
     // Router setup
     $server->useRouter($apiRouter);
 

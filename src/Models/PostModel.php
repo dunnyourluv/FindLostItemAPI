@@ -233,6 +233,29 @@ class PostModel extends Model
     });
   }
 
+  function accept()
+  {
+    $post = $this->getById();
+    if (!$post)
+      throw new PostException('Post not found', 404);
+    $post->status = 'published';
+    return $post->update();
+  }
+
+  function reject()
+  {
+    $post = $this->getById();
+    if (!$post)
+      throw new PostException('Post not found', 404);
+    $post->status = 'rejected';
+    return $post->update();
+  }
+
+  function isPublic()
+  {
+    return $this->status == 'published';
+  }
+
   /**
    * Get the value of title
    */
