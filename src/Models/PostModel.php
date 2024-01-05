@@ -199,6 +199,16 @@ class PostModel extends Model
     });
   }
 
+  function countWithStatus()
+  {
+    $db = Database::connect();
+    $sql = new StringBuilder();
+    $sql->append('SELECT COUNT(*) FROM ' . $this->getTableName() . ' WHERE status = ?');
+    $stm = $db->run($sql->toString(), [$this->status]);
+    $data = $stm->fetch();
+    return $data['COUNT(*)'];
+  }
+
   static function search($keyword = '', $topic = '', $address = '')
   {
     $sql = new StringBuilder();

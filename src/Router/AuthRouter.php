@@ -2,7 +2,6 @@
 
 namespace DUVX\Router;
 
-use DunnServer\Middlewares\HandleFileFilter;
 use DunnServer\Router\Router;
 use DUVX\Controllers\LoginCtl;
 use DUVX\Controllers\RegisterCtl;

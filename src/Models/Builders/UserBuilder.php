@@ -1,6 +1,7 @@
 <?php
 
 namespace DUVX\Models\Builders;
+
 use DUVX\Models\UserModel;
 
 class UserBuilder
@@ -90,7 +91,7 @@ class UserBuilder
     $this->password = $body->get("password");
     $this->email = $body->get("email");
     $this->avatar = $body->get("avatar");
-    $this->isAdmin = $body->get('isAdmin') === 1;
+    $this->isAdmin = $body->get('isAdmin') == 1;
     $this->uuid = $body->get("uuid");
     return $this;
   }

@@ -47,4 +47,4 @@ CREATE TABLE `post_images` (
 );
 
 -- Insert default admin user
-INSERT INTO `users` (`uuid`, `username`, `password`, `email`, `is_admin`, `avatar`) VALUES ('1', 'admin', 'admin', 'admin@gmail.com', 1, 'https://i.imgur.com/1qB3q9o.png');
+INSERT INTO `users` (`uuid`, `username`, `password`, `email`, `is_admin`, `avatar`) VALUES ('1', 'admin', 'adminadmin', 'admin@gmail.com', 1, 'https://i.imgur.com/1qB3q9o.png');

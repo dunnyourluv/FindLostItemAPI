@@ -3,12 +3,9 @@
 namespace DUVX\Router;
 
 use DunnServer\Router\Router;
-use DUVX\Controllers\AcceptPostCtl;
 use DUVX\Controllers\PostDetailCtl;
 use DUVX\Controllers\RecommendPostCtl;
 use DUVX\Controllers\SearchPostCtl;
-use DUVX\Middlewares\AuthFilter;
-use DUVX\Middlewares\IsAdminFilter;
 use DUVX\Middlewares\SetUserExists;
 
 class PostPublicRouter extends Router

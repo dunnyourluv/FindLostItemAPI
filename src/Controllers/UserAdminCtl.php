@@ -42,4 +42,14 @@ class UserAdminCtl extends Controller
 
     $res->send($payload);
   }
+
+  function doDelete($req, $res)
+  {
+    $uuid = $req->getParams('uuid');
+    $model = UserModel::builder()->uuid($uuid)->build();
+    $model->delete();
+    $payload = HttpPayload::success($model, 'Delete user successfully!');
+    $res->send($payload);
+  }
+
 }
