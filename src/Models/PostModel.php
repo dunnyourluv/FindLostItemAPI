@@ -137,6 +137,9 @@ class PostModel extends Model
     $db = Database::connect();
 
     $stm = $db->run('SELECT * FROM ' . $this->getTableName() . ' WHERE uuid = :uuid', ['uuid' => $this->uuid]);
+
+    // SELECT * FROM WHERE uuid = 123
+
     $data = $stm->fetch();
     return $data ? self::builder()->fromDatabase($data)->build() : null;
   }
@@ -248,6 +251,7 @@ class PostModel extends Model
     $post = $this->getById();
     if (!$post)
       throw new PostException('Post not found', 404);
+
     $post->status = 'published';
     return $post->update();
   }

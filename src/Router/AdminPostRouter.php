@@ -15,7 +15,7 @@ class AdminPostRouter extends Router
 {
   function __construct()
   {
-    parent::__construct('/admin/posts');
+    parent::__construct('/admin/posts'); //http://localhost:8080/admin/posts/123/accept
 
     $this->addRoute('/{uuid}/accept', new AcceptPostCtl());
     $this->addRoute('/{uuid}/reject', new RejectPostCtl());

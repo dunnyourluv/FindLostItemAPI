@@ -13,7 +13,7 @@ class TopicRouter extends Router
 {
   function __construct()
   {
-    parent::__construct('/topic');
+    parent::__construct('/topic'); // http://localhost:8080/topic/add
     $this->addRoute('/add', new PostTopicCtl());
     $this->addRoute('', new GetTopicCtl());
     $this->addRoute('/{uuid}', new ModifiedTopicCtl());
